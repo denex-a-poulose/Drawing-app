@@ -1,0 +1,22 @@
+*{
+  margin: 0;
+  padding:0;
+  
+}
+
+#canvas{
+  border:1px solid black ;
+}
+
+
+#color{
+  padding: 0;
+  border:none;
+  background: none;
+  width: 44px;
+  height: 44px;
+}
+
+#thickness{
+  padding:10px;
+}
