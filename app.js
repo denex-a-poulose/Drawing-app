@@ -1,51 +1,62 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-ctx.fillStyle = 'white';
-ctx.fillRect(0, 0, 500, 500);
-
-
-ctx.fillStyle = 'black';
-
-let brushColor = 'black';
-let brushSize = 3;
+window.addEventListener('load', () => {
+  const canvas = document.querySelector('#canvas');
+  const ctx = canvas.getContext('2d');
+  let lineWidth = 10;
+  let brushColor = 'black';
+  document.getElementById('color').addEventListener('change', function() {
+    brushColor = this.value;
+  });
 
 
-document.getElementById('color').addEventListener('change', function() {
-  brushColor = this.value;
-});
-
-document.getElementById('thickness').addEventListener('change', function() {
-  brushSize = this.value;
-});
+  document.getElementById('brush').addEventListener('change', function() {
+    lineWidth = this.value;
+  });
 
 
-let painting = false;
 
 
-function paintingStart(e) {
-  painting = true;
-  
-}
+  //resizing the canvas
+
+  canvas.height = window.innerHeight / 1.2;
+  canvas.width = window.innerWidth;
+
+  canvas.style.background = 'white'
 
 
-function paintingEnd(e) {
-  painting = false;
-  ctx.beginPath();
-}
 
-function draw() {
-  if (painting == false) return;
-  let x = e.clientX;
-  let y = e.clientY - canvas.offsetTop;
+  let painting = false;
 
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = 'round';
-  ctx.lineTo(x, y);
-  ctx.strokeStyle = brushColor;
-  ctx.stroke();
-}
+  function startPosition(e) {
+    painting = true;
+    draw(e);
+  }
 
-canvas.addEventListener('mousedown', paintingStart);
-canvas.addEventListener('mouseup', paintingEnd);
-canvas.addEventListener('mousemove', draw);
+  function finshedPosition() {
+    painting = false;
+    ctx.beginPath();
+  }
+
+  function draw(e) {
+    if (!painting) return;
+    ctx.lineWidth = lineWidth;
+
+    ctx.lineCap = 'round';
+
+
+    ctx.lineTo(e.clientX, e.clientY - canvas.offsetTop);
+    ctx.stroke();
+    ctx.strokeStyle = brushColor;
+    ctx.beginPath();
+    ctx.moveTo(e.clientX, e.clientY - canvas.offsetTop);
+
+  }
+  // event listeners
+
+
+  canvas.addEventListener('mousedown', startPosition);
+  canvas.addEventListener('mouseup', finshedPosition);
+  canvas.addEventListener('mousemove', draw);
+
+
+  alert('adjust brush size and change colour')
+})
